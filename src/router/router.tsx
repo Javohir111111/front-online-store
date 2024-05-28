@@ -1,9 +1,10 @@
-import { Home, About, Service, Contact, Posts, ErrorPage , Blog } from "@pages";
-import HomeIcon from '@mui/icons-material/Home';
+import { Home, About, Service, Posts, ErrorPage , PostItem } from "@pages";
+// import {  }
+// import HomeIcon from '@mui/icons-material/Home';
 
 const router = [
   {
-    path: "/",
+    path: "/signup",
     element: <Home />,
     content:"Enter",
   },
@@ -16,7 +17,7 @@ const router = [
     path: "/service",
     element: <Service />,
     content:"Basket",
-    icon: <HomeIcon />
+    // icon: <HomeIcon />
   },
   // {
   //   path: "/contact",
