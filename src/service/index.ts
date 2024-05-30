@@ -1,5 +1,5 @@
 import postAPI from "./posts";
-import authAPI from "./auth"
+import {auth }from "./auth"
 
 
-export { authAPI , postAPI}
+export { auth , postAPI}

@@ -3,7 +3,7 @@ import { propType } from "@interface";
 
 const index = ({children}:propType) => {
     return (
-        <div className="container">
+        <div className="orginal-container">
            {children}
         </div>
     );

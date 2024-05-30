@@ -1,92 +1,102 @@
-import { useState } from 'react';
-import { Form, Input, Button } from 'antd';
-// import { HeartOutlined, HeartFilled } from '@ant-design/icons';
-import { Container } from "@containers";
-import "./style.scss"
+import { Form, Input, Button, message } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../../service/auth";
+import { setCookies } from "../../utils/cookies";
+import { initialValuesLogin } from "../../types/interface";
+import { schemaLogin } from "../../utils/validation";
+import "./style.scss";
 
-const index = () => {
-    const [form] = Form.useForm();
-    const [errors, setErrors] = useState<Record<string, string>>({});
+const Index = () => {
+  const navigate = useNavigate();
 
-    const handleSubmit = async () => {
-        try {
-          const values = await form.validateFields();
-          // Submit the form or make an API call
-          console.log('Form submitted:', values);
-        } catch (error) {
-          const { errorFields } = error;
-          const newErrors: Record<string, string> = {};
-          errorFields.forEach((field: any) => {
-            newErrors[field.name[0]] = field.errors[0];
-          });
-          setErrors(newErrors);
-        }
-      };
-    interface initialValues {
-        email: string;
-        first_name: string;
-        gender: string;
-        last_name: string;
-        password: string;
+  const handleFinish = async (values) => {
+    try {
+      const response = await auth.signin(values);
+      if (response.status === 200) {
+        setCookies("access_token", response?.data?.access_token);
+        setCookies("refresh_token", response?.data?.refresh_token);
+        setCookies("user_id", response?.data?.id);
+        message.success("Successfully logged in");
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      }
+    } catch (error) {
+      message.error("Error: " + error);
+      console.error(error);
     }
-    const initialValues: initialValues = {
-        email: "",
-        first_name: "",
-        gender: "",
-        last_name: "",
-        password: "",
-    };
-    return (
-        <>
-            <Container>
-                <Form
-                    form={form}
-                    onFinish={handleSubmit}
-                    initialValues={{ remember: true }}
-                >
-                    <Form.Item
-                        label="Username"
-                        name="username"
-                        rules={[{ required: true, message: 'Username is required' }]}
-                        validateStatus={errors.username ? 'error' : ''}
-                        help={errors.username}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Email"
-                        name="email"
-                        rules={[
-                            { required: true, message: 'Email is required' },
-                            { type: 'email', message: 'Invalid email address' },
-                        ]}
-                        validateStatus={errors.email ? 'error' : ''}
-                        help={errors.email}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Password"
-                        name="password"
-                        rules={[
-                            { required: true, message: 'Password is required' },
-                            { min: 6, message: 'Password must be at least 6 characters' },
-                        ]}
-                        validateStatus={errors.password ? 'error' : ''}
-                        help={errors.password}
-                    >
-                        <Input.Password />
-                    </Form.Item>
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit">
-                            Register
-                        </Button>
-                    </Form.Item>
-                </Form>
-                <ToastContainer />
-            </Container>
-        </>
-    );
+  };
+  const initialValues: initialValuesLogin = {
+    email:  "",
+    password:  "",
 };
 
-export default index;
+  return (
+    <div className="w-full flex items-center justify-center">
+      <div className="max-w-[710px] w-full py-10 px-20 rounded-tl-[30px] rounded-br-3xl shadow-[30px]">
+        <h1 className="text-center mb-5 text-[36px] font-bold text-gray-500">
+          Tizimga kirish
+        </h1>
+        <Form
+          initialValues={initialValues}
+          onFinish={handleFinish}
+          className="w-full flex flex-col gap-[15px]"
+        >
+          <Form.Item
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: "Please input your email!",
+              },
+            ]}
+          >
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Email"
+              className="w-[100%] mb-3"
+            />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              placeholder="Password"
+              className="w-[100%] mb-3"
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="w-[100%]"
+            >
+              kirish
+            </Button>
+          </Form.Item>
+        </Form>
+        <p className="text-[20px] text-sky-500 pt-2 flex items-center justify-between">
+          Ro'yxatdan o'tmaganmisiz ?{" "}
+          <span
+            className="hover:text-sky-700 duration-200 cursor-pointer"
+            onClick={() => {
+              navigate("/signup");
+            }}
+          >
+            → Ro'yxatdan o'tish
+          </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default Index;

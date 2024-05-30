@@ -17,20 +17,31 @@ export interface ResetPassword{
     email?: string;
     phone?: string|number;
 }
+interface Verify {
+    email: string;
+    otp: string
+}
 
 
 export interface Request{
-    signin:(data:Signin)=>any,
     signup:(data:Signup)=>any,
-    signout:()=>void,
-    reset:(data:ResetPassword)=>void
+    verify:(data:Verify)=>any,
+    createUser:(data:Signup)=>any,
+    signin:(data:Signin)=>any,
+    
+    // reset:(data:ResetPassword)=>void
 }
 
+export interface initialValuesLogin {
+    email: string;
+    password: string;
+}
 //-------------------------------------
 
 export interface RequestPosts{
     get:()=>any,
     getById:(id:number)=>any,
+    postlike:(id:number|string)=>any,
     create:(data:any)=>any,
     delete:(id:string|number)=>void,
     update:(data:any)=>any

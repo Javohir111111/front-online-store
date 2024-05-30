@@ -7,7 +7,7 @@ const index = ({children, title}:sectionPropType) => {
         <section>
           {
             title && <Container>
-                       <h1 className="p-4 text-2xl font-medium border">{title}</h1>
+                       <h1 className="p-4 text-2xl font-medium ">{title}</h1>
                     </Container>
           }
           {

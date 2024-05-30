@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Section, Container, Grid } from "@containers";
+import { Section, Container } from "@containers";
 import { Card } from "@ui";
 
 import { PostItem } from "@interface";
@@ -34,14 +34,16 @@ const index = () => {
   }, []);
 
   return (
-    <Section id={"post"} title="POSTS">
+    <Section id={"post"} title="Prodact list">
       <Container>
         {!loading ? (
-          <Grid cols="4" gap="50">
+          <div className=" grid grid-cols-4">
             {post.length ? post?.map((item: PostItem) => {
               return <Card key={item.id} data={item} />
             }): ""}
-          </Grid>
+
+          </div>
+          
         ) : (
           <h1>LOADING ....</h1>
         )}

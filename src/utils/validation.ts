@@ -2,21 +2,10 @@ import * as Yup from "yup";
 
 
 
-const schema = Yup.object().shape({
+export const schemaLogin = Yup.object().shape({
     email: Yup.string().email("Email invalit ").required("Email is required"),
-    first_name: Yup.string()
-        .min(5, "Username invalit ")
-        .required("Username is required"),
-    last_name: Yup.string()
-        .min(5, "Username invalit ")
-        .required("Username is required"),
-    gender: Yup.string().required("Gender is required"),
-    password: Yup.string()
-        .matches(
-            /^(?=.*[a-z])(?=.*[A-Z]).{6,}$/,
-            "Password must contain at least one uppercase and one lowercase letter"
-        )
-        .required("Password is required"),
-});
-
-export {schema}
+    password: Yup.string().matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,20}$/,
+        "Password must contain at least one uppercase, one lowercase letter, one number, one special character, and be between 8 to 20 characters long"
+      ).required("Password is required")
+  });

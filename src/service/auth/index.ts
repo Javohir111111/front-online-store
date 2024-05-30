@@ -1,11 +1,9 @@
-import { request } from "../config";
+import http from "../config";
 import { Request } from "@interface";
 
-const auth:Request={
-    signin: (data)=> request.post("/login",data),
-    signup: (data)=> request.post("/signup",data),
-    signout: ()=> request.post("/signout"),
-    reset: (data)=> request.post("/reset", data),
+export const auth:Request={
+    signup: (data)=> http.post("/register",data),
+    verify: (data)=> http.post(`/verify?email=${data.email}&otp=${data.otp}`), 
+    createUser: (data)=> http.post("/user",data),
+    signin: (data)=> http.post("/login",data),
 }
-
-export default auth
